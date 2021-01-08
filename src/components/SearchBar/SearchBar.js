@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 
 export default function SearchBar(props) {
-    let [q, setQ] = useState("");
+    let [q, setQ] = useState(props.q);
 
     const onSearchHandler = () => {
         props.postSearchHandler(q);
