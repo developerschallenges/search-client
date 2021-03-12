@@ -1,19 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function Pager(props) {
-    let [selectedPage, setSelectedPage] = useState(props.currentPage);
     let totalPages = Math.ceil(props.resultCount / props.resultsPerPage);
 
-    useEffect(_=>{
-        props.setCurrentPage(selectedPage);
-    }, [selectedPage, props]);
-
-    function goToNextPage() {
-        setSelectedPage(selectedPage + 1);
+    function goToNextPage(e) {
+        e.preventDefault();
+        props.setCurrentPage(props.currentPage + 1);
     }
 
-    function goToPreviousPage() {
-        setSelectedPage(selectedPage - 1);
+    function goToPreviousPage(e) {
+        e.preventDefault();
+        props.setCurrentPage(props.currentPage - 1);
     }
 
     var i = 0;
@@ -22,64 +19,64 @@ export default function Pager(props) {
     var minPage = 1;
     var maxPage = totalPages;
 
-    if (selectedPage - minPage > 2) {
-        minPage = selectedPage - 2;
+    if (props.currentPage - minPage > 2) {
+        minPage = props.currentPage - 2;
     }
 
-    if (maxPage - selectedPage > 2) {
-        maxPage = parseInt(selectedPage) + 2;
+    if (maxPage - props.currentPage > 2) {
+        maxPage = parseInt(props.currentPage) + 2;
     }
 
     if (minPage >= 2) {
         page_links.push(
-            <a class="page-number" href="#" onClick={ () => setSelectedPage(1) }>1</a>
+            <a className="page-number" href="" onClick={(e) => { e.preventDefault(); props.setCurrentPage(1); }} key={"1"}>1</a>
         );
     }
 
     if (minPage > 2) {
         page_links.push(
-            <span class="space">…</span>
-        );  
+            <span className="space" key={"space"}>…</span>
+        );
     }
 
     for (i = minPage; i <= maxPage; i++) {
-        if (i === parseInt(selectedPage)) {
+        if (i === parseInt(props.currentPage)) {
             page_links.push(
-                <span class="page-number current">{i}</span>
+                <span className="page-number current" key={i}>{i}</span>
             );
         } else {
             page_links.push(
-                <a class="page-number" href="#" onClick={function() { var page = i; return function() { setSelectedPage(page) }}()}>{i}</a>
+                <a className="page-number" href="" onClick={function () { var page = i; return function (e) { e.preventDefault(); props.setCurrentPage(page); } }()} key={i}>{i}</a>
             );
         }
     }
 
     if (maxPage < totalPages - 1) {
         page_links.push(
-            <span class="space">…</span>
-        );  
+            <span className="space" key={"space"}>…</span>
+        );
     }
 
     if (maxPage <= totalPages - 1) {
         page_links.push(
-            <a class="page-number" href="#" onClick={ () => setSelectedPage(totalPages) }>{totalPages}</a>
+            <a className="page-number" href="" onClick={(e) => { e.preventDefault(); props.setCurrentPage(totalPages); }} key={totalPages}>{totalPages}</a>
         );
     }
 
     var previousButton;
-    if (parseInt(selectedPage) !== 1) {
-        previousButton = (<a class="extend prev" rel="prev" href="#" onClick={goToPreviousPage}>«</a>);
+    if (parseInt(props.currentPage) !== 1) {
+        previousButton = (<a className="extend prev" rel="prev" href="" onClick={goToPreviousPage}>«</a>);
     }
 
     var nextButton;
-    if (parseInt(selectedPage) !== totalPages) {
-        nextButton = (<a class="extend next" rel="next" href="#" onClick={goToNextPage}>»</a>);
-    }   
+    if (parseInt(props.currentPage) !== totalPages) {
+        nextButton = (<a className="extend next" rel="next" href="" onClick={goToNextPage}>»</a>);
+    }
 
     return (
         (totalPages > 0) &&
         <nav id="page-nav">
-            <span class="pages">Page {props.currentPage} of {totalPages}</span>
+            <span className="pages">Page {props.currentPage} of {totalPages}</span>
             {previousButton}
             {page_links}
             {nextButton}

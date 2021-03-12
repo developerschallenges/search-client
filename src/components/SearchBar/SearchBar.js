@@ -1,10 +1,20 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 export default function SearchBar(props) {
-    let [q, setQ] = useState(props.q);
+    const [tempSearchPhrase, setTempSearchPhrase] = useState("");
 
+    useEffect(() => {
+        setTempSearchPhrase(props.searchPhrase)
+    }, [props.searchPhrase])
+    
     const onSearchHandler = () => {
-        props.postSearchHandler(q);
+        props.setSearchPhrase(tempSearchPhrase);
+        if (window.history.pushState) {
+            var newurl = window.location.origin + window.location.pathname + '?q=' + tempSearchPhrase;
+            if (window.location.href !== newurl) {
+                window.history.pushState('search-phrase', '', newurl);
+            }
+        }
     }
 
     const onEnterButton = (event) => {
@@ -14,38 +24,9 @@ export default function SearchBar(props) {
     }
 
     const onChangeHandler = () => {
-        var searchTerm = document.getElementById("search-box").value;
-        setQ(searchTerm);
-
-        // use this prop if you want to make the search more reactive
-        if (props.searchChangeHandler) {
-            props.searchChangeHandler(searchTerm);
-        }
+        var searchBoxValue = document.getElementById("search-box").value;
+        setTempSearchPhrase(searchBoxValue);
     }
-
-    // https://stackoverflow.com/questions/58442168/why-useeffect-doesnt-run-on-window-location-pathname-changes
-    // const useReactSearch = () => {
-    //     const [locationSearch, setLocationSearch] = React.useState(window.location.search);
-    //     const listenToPopstate = () => {
-    //         const winSearch = window.location.search;
-    //         setLocationSearch(winSearch);
-    //     };
-    //     React.useEffect(() => {
-    //         window.addEventListener("popstate", listenToPopstate);
-    //         return () => {
-    //             window.removeEventListener("popstate", listenToPopstate);
-    //         };
-    //     }, []);
-    //     return locationSearch;
-    // };
-
-    // const reactSearch = useReactSearch();
-    // useEffect(() => {
-    //     const newQ = new URLSearchParams(window.location.search).get('q');
-    //     if (newQ !== q) {
-    //         props.postSearchHandler(newQ);
-    //     }
-    // }, [reactSearch])
 
     const inputStyle = {
         padding: 10,
@@ -75,11 +56,11 @@ export default function SearchBar(props) {
     return (
         <div onKeyDown={e => onEnterButton(e)}>
             <input 
-                autoComplete="off" // setting for browsers; not the app
+                autoComplete="off"
                 type="text"
                 id="search-box"
                 onChange={onChangeHandler}
-                defaultValue={props.q}
+                value={tempSearchPhrase}
                 style={inputStyle}>
             </input>
             <button type="submit" onClick={onSearchHandler} style={buttonStyle}>
