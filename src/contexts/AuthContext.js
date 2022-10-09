@@ -8,5 +8,5 @@ export function useAuth() {
     return useContext(AuthContext);
 }
 
-export const baseApiUrl = 'https://fa-developerschallenges-search.azurewebsites.net';
+export const baseApiUrl = 'https://fa-developerschallenges.azurewebsites.net';
 //export const baseApiUrl = 'http://localhost:7071';
