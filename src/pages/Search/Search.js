@@ -19,6 +19,7 @@ export default function Search() {
     const [resultCount, setResultCount] = useState(0);
     const [top] = useState(new URLSearchParams(location.search).get('top') ?? 5);
     const [isLoading, setIsLoading] = useState(true);
+    const [isError, setIsError] = useState(true);
 
     const fetchData = (searchPhrase, page) => {
         const skip = (page - 1) * top;
@@ -29,6 +30,7 @@ export default function Search() {
         };
 
         setIsLoading(true);
+        setIsError(false);
         axios.post(baseApiUrl + '/api/search', searchBody)
             .then(response => {
                 setResults(response.data.results);
@@ -38,6 +40,7 @@ export default function Search() {
             .catch(error => {
                 console.log(error);
                 setIsLoading(false);
+                setIsError(true);
             })
     }
 
@@ -69,6 +72,14 @@ export default function Search() {
             <div style={circularProgressStyle}>
                 <CircularProgress />
             </div>);
+    } else if (isError) {
+        body = (
+            <div>
+                <p>
+                    Error fetching results
+                </p>
+            </div>
+        )
     } else {
         body = (
             <div>

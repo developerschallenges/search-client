@@ -28,6 +28,10 @@ export default function SearchBar(props) {
         setTempSearchPhrase(searchBoxValue);
     }
 
+    const divStyle = {
+        position: 'relative'
+    }
+
     const inputStyle = {
         padding: 10,
         fontSize: 38,
@@ -50,11 +54,12 @@ export default function SearchBar(props) {
         padding: 12,
         fontSize: 38,
         position: 'absolute',
-        cursor: 'pointer'
+        cursor: 'pointer',
+        height: '100%'
     }
 
     return (
-        <div onKeyDown={e => onEnterButton(e)}>
+        <div onKeyDown={e => onEnterButton(e)} style={divStyle}>
             <input 
                 autoComplete="off"
                 type="text"

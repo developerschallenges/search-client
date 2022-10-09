@@ -9,4 +9,4 @@ export function useAuth() {
 }
 
 export const baseApiUrl = 'https://fa-developerschallenges-search.azurewebsites.net';
-// export const baseApiUrl = 'http://localhost:7071';
+//export const baseApiUrl = 'http://localhost:7071';

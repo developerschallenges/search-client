@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 export default function Pager(props) {
     let totalPages = Math.ceil(props.resultCount / props.resultsPerPage);
